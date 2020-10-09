@@ -18,7 +18,7 @@ using MySql.Data.MySqlClient;
                 return con;
 
             }
-            internal Evento Retrieve()
+            internal EventoDTO Retrieve()
             {
 
                 MySqlConnection con = Connect();
@@ -28,12 +28,12 @@ using MySql.Data.MySqlClient;
                 con.Open();
                 MySqlDataReader res = command.ExecuteReader();
 
-                Evento e = null;
+                EventoDTO e = null;
 
                 if (res.Read())
                 {
-                    Debug.WriteLine("Recuperado: " + res.GetInt32(0) + res.GetString(1) + res.GetString(2) + res.GetString(3) + res.GetInt32(4));
-                    e = new Evento(res.GetInt32(0), res.GetString(1), res.GetString(2), res.GetString(3), res.GetInt32(4));
+                    Debug.WriteLine("Recuperado: " + res.GetString(1) + res.GetString(2) + res.GetString(3));
+                    e = new EventoDTO(res.GetString(1), res.GetString(2), res.GetString(3));
                 }
 
 

@@ -17,18 +17,29 @@ namespace PlaceMyBet.Controllers
         }
 
         // GET: api/Apuesta/5
-        public Apuesta Get(int id)
+        public ApuestaDTO Get(int id)
         {
 
             var repo = new ApuestaRepository();
-            Apuesta a = repo.Retrieve();
+            ApuestaDTO a = repo.Retrieve();
             return a;
 
         }
 
+
         // POST: api/Apuesta
-        public void Post([FromBody]string value)
+        public void Post([FromBody]ApuestaDTO apuesta)
         {
+            var repoMercado = new MercadoRepository();
+            var repo = new ApuestaRepository();
+
+           var cuota = repo.RetrieveCuotas(apuesta);
+
+            repoMercado.UpdateDinero(apuesta);
+           var dinero = repoMercado.RetrieveDinero();
+
+            repoMercado.Calculos(apuesta, dinero);
+            repo.Save(apuesta, cuota);
         }
 
         // PUT: api/Apuesta/5

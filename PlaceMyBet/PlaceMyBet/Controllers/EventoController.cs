@@ -17,11 +17,11 @@ namespace PlaceMyBet.Controllers
         }
 
         // GET: api/Evento/5
-        public Evento Get(int id)
+        public EventoDTO Get(int id)
         {
 
             var repo = new EventoRepository();
-            Evento e = repo.Retrieve();
+            EventoDTO e = repo.Retrieve();
             return e;
 
         }

@@ -12,7 +12,7 @@ namespace PlaceMyBet.Models
             ApuestaID = apuestaID;
             DineroApostado = dineroApostado;
             TipoApuesta = tipoApuesta;
-            this.cuota = cuota;
+            this.Cuota = cuota;
             Fecha = fecha;
             IDMercado = iDMercado;
             EmailUsuario = emailUsuario;
@@ -21,10 +21,33 @@ namespace PlaceMyBet.Models
         public int ApuestaID { get; set; }
         public double DineroApostado { get; set; }
         public string TipoApuesta { get; set; }
-        public double cuota { get; set; }
+        public double Cuota { get; set; }
         public string Fecha { get; set; }
         public int IDMercado { get; set; }
         public string EmailUsuario { get; set; }
 
     }
+
+    public class ApuestaDTO
+    {
+        public ApuestaDTO(double dineroApostado, string tipoApuesta, double cuota, string fecha, int iDMercado, string emailUsuario)
+        {
+            DineroApostado = dineroApostado;
+            TipoApuesta = tipoApuesta;
+            this.Cuota = cuota;
+            Fecha = fecha;
+            IDMercado = iDMercado;
+            EmailUsuario = emailUsuario;
+        }
+
+        public double DineroApostado { get; set; }
+        public string TipoApuesta { get; set; }
+        public double Cuota { get; set; }
+        public string Fecha { get; set; }
+        public int IDMercado { get; set; }
+        public string EmailUsuario { get; set; }
+
+    }
+
 }
+
