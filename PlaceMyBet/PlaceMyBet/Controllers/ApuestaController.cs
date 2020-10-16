@@ -33,12 +33,13 @@ namespace PlaceMyBet.Controllers
             var repoMercado = new MercadoRepository();
             var repo = new ApuestaRepository();
 
-           var cuota = repo.RetrieveCuotas(apuesta);
+            double cuota = repo.RetrieveCuotas(apuesta);
 
             repoMercado.UpdateDinero(apuesta);
-           var dinero = repoMercado.RetrieveDinero();
 
-            repoMercado.Calculos(apuesta, dinero);
+            MercadoDinero dinero = repoMercado.RetrieveDinero();
+
+            repoMercado.Calculos(dinero);
             repo.Save(apuesta, cuota);
         }
 

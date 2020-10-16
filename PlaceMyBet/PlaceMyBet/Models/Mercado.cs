@@ -42,4 +42,18 @@ namespace PlaceMyBet.Models
         public double CuotaUnder { get; set; }
 
     }
-}
+
+    public class MercadoDinero
+    {
+        public MercadoDinero(int mercadoID, double dineroOver, double dineroUnder)
+        {
+            MercadoID = mercadoID;
+            DineroOver = dineroOver;
+            DineroUnder = dineroUnder;
+        }
+
+        public int MercadoID { get; set; }
+        public double DineroOver { get; set; }
+        public double DineroUnder { get; set; }}
+
+    }

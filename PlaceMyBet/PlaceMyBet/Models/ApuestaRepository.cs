@@ -51,7 +51,7 @@ namespace PlaceMyBet.Models
         }
 
 
-        internal MercadoDTO RetrieveCuotas(ApuestaDTO apuesta)
+        internal double RetrieveCuotas(ApuestaDTO apuesta)
         {
 
 
@@ -76,25 +76,26 @@ namespace PlaceMyBet.Models
                 con.Open();
                 MySqlDataReader res = command.ExecuteReader();
 
-                MercadoDTO m = null;
+                double cuota = 0;
 
                 if (res.Read())
                 {
-                    m = new MercadoDTO(res.GetDouble(0), res.GetDouble(0), res.GetDouble(0));
+                    cuota = res.GetDouble(0);
+
                 }
-                return m;
+                return cuota;
             }
             catch (MySqlException a)
             {
 
                 Debug.WriteLine("Se ha producido un error de conexión");
-                return null;
+                return 0;
 
             }
         }
 
 
-        internal void Save(ApuestaDTO apuesta, MercadoDTO cuota)
+        internal void Save(ApuestaDTO apuesta, double cuota)
         {
             MySqlConnection con = Connect();
             MySqlCommand command = con.CreateCommand();
@@ -103,28 +104,20 @@ namespace PlaceMyBet.Models
 
 
 
-            try {
-               
 
 
                 con.Open();
-                command.CommandText = "INSERT INTO apuesta(DineroApostado, TipoApuesta, Cuota, ID_Mercado, Email_Usuario) VALUES('" + apuesta.DineroApostado + "','" + apuesta.TipoApuesta + "','" + cuota.CuotaUnder.ToString(CultureInfo.CreateSpecificCulture("us-US")) + "','" + apuesta.IDMercado + "','" + apuesta.EmailUsuario + "');";
+                command.CommandText = "INSERT INTO apuesta(DineroApostado, TipoApuesta, Cuota, ID_Mercado, Email_Usuario) VALUES('" + apuesta.DineroApostado + "','" + apuesta.TipoApuesta + "','" + cuota.ToString(CultureInfo.CreateSpecificCulture("us-US")) + "','" + apuesta.IDMercado + "','" + apuesta.EmailUsuario + "');";
                 Debug.WriteLine("Comando: " + command.CommandText);
                 command.ExecuteNonQuery();
 
 
                 con.Close();
-            }
+            
 
 
 
-            catch (MySqlException a)
-            {
 
-                Debug.WriteLine("Se ha producido un error de conexión");
-                
-
-            }
         }
     }
 

@@ -68,7 +68,7 @@ namespace PlaceMyBet.Models
 
 
 
-        internal Mercado RetrieveDinero()
+        internal MercadoDinero RetrieveDinero()
         {
 
             MySqlConnection con = Connect();
@@ -78,19 +78,19 @@ namespace PlaceMyBet.Models
             con.Open();
             MySqlDataReader res = command.ExecuteReader();
 
-            Mercado Dinero = null;
+            MercadoDinero Dinero = null;
 
             if (res.Read())
             {
-
-                Dinero = new Mercado(res.GetInt32(0), res.GetDouble(1), res.GetDouble(2), res.GetDouble(3), res.GetDouble(4), res.GetDouble(5), res.GetDouble(6));
+                Debug.WriteLine("dinero recuperado " + res.GetInt32(0) + res.GetDouble(4) + res.GetDouble(5));
+                Dinero = new MercadoDinero(res.GetInt32(0), res.GetDouble(4), res.GetDouble(5));
             }
 
             return Dinero;
 
         }
 
-        internal void Calculos(ApuestaDTO apuesta, Mercado Dinero)
+        internal void Calculos(MercadoDinero Dinero)
         {
             
             MySqlConnection con = Connect();
