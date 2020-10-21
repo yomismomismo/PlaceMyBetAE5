@@ -50,6 +50,34 @@ namespace PlaceMyBet.Models
             }
         }
 
+        internal List<ApuestaUser> getApuestaUser(string email, double tipoMercado)
+        {
+
+            MySqlConnection con = Connect();
+            MySqlCommand command = con.CreateCommand();
+            command.CommandText = "SELECT m.OverUnder, m.ID_Evento , a.TipoApuesta, a.Cuota, a.DineroApostado, a.Email_Usuario FROM mercado m join apuesta a ON a.ID_Mercado = m.ID WHERE OverUnder = @tipo && Email_usuario = @email ";
+            command.Parameters.AddWithValue("@email", email);
+            command.Parameters.AddWithValue("@tipo", tipoMercado);
+
+            con.Open();
+            MySqlDataReader res = command.ExecuteReader();
+
+            ApuestaUser apuestasUser = null;
+            List<ApuestaUser> userApuesta = new List<ApuestaUser>();
+
+            while (res.Read())
+            {
+
+
+                apuestasUser = new ApuestaUser(res.GetInt32(1), res.GetString(2), res.GetDouble(3), res.GetDouble(4));
+                userApuesta.Add(apuestasUser);
+            }
+
+            return userApuesta;
+
+        }
+
+       
 
         internal double RetrieveCuotas(ApuestaDTO apuesta)
         {

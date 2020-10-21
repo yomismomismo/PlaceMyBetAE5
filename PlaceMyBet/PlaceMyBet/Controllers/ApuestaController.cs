@@ -25,6 +25,19 @@ namespace PlaceMyBet.Controllers
             return a;
 
         }
+        [Authorize(Roles ="admin")]
+        // GET: api/Apuesta/?Email=email&tipoMercado=tipo
+        public IEnumerable<ApuestaUser> GetApuestasUser(string Email, double tipoMercado)
+        {
+
+            var repo = new ApuestaRepository();
+            List<ApuestaUser> apuestasUser = repo.getApuestaUser(Email, tipoMercado);
+            return apuestasUser;
+
+        }
+
+
+
 
 
         // POST: api/Apuesta

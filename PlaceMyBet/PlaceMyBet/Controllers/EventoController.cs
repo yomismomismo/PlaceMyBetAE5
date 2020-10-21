@@ -26,6 +26,16 @@ namespace PlaceMyBet.Controllers
 
         }
 
+
+        // GET: api/Evento/?idEvento=id&tipoMercado=tipo
+        public Mercado GetMercado(int idEvento, double tipoMercado)
+        {
+            var repoMercado = new MercadoRepository();
+            Mercado e = repoMercado.getMercado(idEvento, tipoMercado);
+            return e;
+
+        }
+
         // POST: api/Evento
         public void Post([FromBody]string value)
         {

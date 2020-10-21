@@ -43,7 +43,57 @@ namespace PlaceMyBet.Models
 
         }
 
+        internal List<ApuestaMercado> GetApuestasMercado(double tipoMercado, string email)
+        {
 
+            MySqlConnection con = Connect();
+            MySqlCommand command = con.CreateCommand();
+            command.CommandText = "SELECT m.OverUnder, m.ID_Evento , a.TipoApuesta, a.Cuota, a.DineroApostado, a.Email_Usuario FROM mercado m join apuesta a ON a.ID_Mercado = m.ID WHERE OverUnder = @tipo && Email_usuario = @email ";
+            command.Parameters.AddWithValue("@email", email);
+            command.Parameters.AddWithValue("@tipo", tipoMercado);
+
+            con.Open();
+            MySqlDataReader res = command.ExecuteReader();
+
+            ApuestaMercado apuestasUser = null;
+            List<ApuestaMercado> mercadoApuesta = new List<ApuestaMercado>();
+
+            while (res.Read())
+            {
+
+
+                apuestasUser = new ApuestaMercado(res.GetInt32(1), res.GetString(2), res.GetDouble(3), res.GetDouble(4));
+                mercadoApuesta.Add(apuestasUser);
+            }
+
+            return mercadoApuesta;
+
+        }
+
+        internal Mercado getMercado(int id, double tipo)
+        {
+
+            MySqlConnection con = Connect();
+            MySqlCommand command = con.CreateCommand();
+            command.CommandText = "SELECT * FROM Mercado where ID_Evento= @id && OverUnder=@tipo";
+            command.Parameters.AddWithValue("@id", id);
+            command.Parameters.AddWithValue("@tipo", tipo);
+
+            con.Open();
+            MySqlDataReader res = command.ExecuteReader();
+
+            Mercado m = null;
+
+            if (res.Read())
+            {
+
+                Debug.WriteLine("Recuparado: " + res.GetDouble(1) + res.GetDouble(2) + res.GetDouble(3));
+                m = new Mercado(res.GetInt32(0), res.GetDouble(1), res.GetDouble(2), res.GetDouble(3), res.GetDouble(4), res.GetDouble(5), res.GetDouble(6));
+            }
+
+            return m;
+
+        }
 
         internal void UpdateDinero(ApuestaDTO apuesta)
         {
