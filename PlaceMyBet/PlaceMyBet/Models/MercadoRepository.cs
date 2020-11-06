@@ -11,94 +11,133 @@ namespace PlaceMyBet.Models
     public class MercadoRepository
     {
 
-        private MySqlConnection Connect()
+       /* private MySqlConnection Connect()
         {
 
-            string connString = "Server=127.0.0.1;Port=3306;Database=placemybet;Uid=root;Password=;SslMode=none";
+           string connString = "Server=127.0.0.1;Port=3306;Database=placemybet;Uid=root;Password=;SslMode=none";
             MySqlConnection con = new MySqlConnection(connString);
             return con;
 
+        }*/
+
+        internal List<Mercado> RetrieveList()
+        {
+            List<Mercado> mercado = new List<Mercado>();
+            using (PlaceMyBetContext context = new PlaceMyBetContext())
+            {
+                mercado = context.Mercados.ToList();
+            }
+            /* MySqlConnection con = Connect();
+             MySqlCommand command = con.CreateCommand();
+             command.CommandText = "SELECT * FROM Mercado";
+
+             con.Open();
+             MySqlDataReader res = command.ExecuteReader();
+
+             MercadoDTO m = null;
+
+             if (res.Read())
+             {
+
+                 Debug.WriteLine("Recuparado: " + res.GetDouble(1) + res.GetDouble(2) + res.GetDouble(3));
+                 m = new MercadoDTO(res.GetDouble(1), res.GetDouble(2), res.GetDouble(3));
+             }*/
+
+            //return m;
+            return mercado;
+
         }
 
-        internal MercadoDTO Retrieve()
+
+        internal Mercado Retrieve(int id)
         {
-
-            MySqlConnection con = Connect();
-            MySqlCommand command = con.CreateCommand();
-            command.CommandText = "SELECT * FROM Mercado";
-
-            con.Open();
-            MySqlDataReader res = command.ExecuteReader();
-
-            MercadoDTO m = null;
-
-            if (res.Read())
+            Mercado mercado;
+            using (PlaceMyBetContext context = new PlaceMyBetContext())
             {
-               
-                Debug.WriteLine("Recuparado: " + res.GetDouble(1) + res.GetDouble(2) + res.GetDouble(3));
-                m = new MercadoDTO(res.GetDouble(1), res.GetDouble(2), res.GetDouble(3));
+                mercado = context.Mercados.Where(m => m.MercadoID == id)
+                .FirstOrDefault();
             }
+            /* MySqlConnection con = Connect();
+             MySqlCommand command = con.CreateCommand();
+             command.CommandText = "SELECT * FROM Mercado";
 
-            return m;
+             con.Open();
+             MySqlDataReader res = command.ExecuteReader();
+
+             MercadoDTO m = null;
+
+             if (res.Read())
+             {
+
+                 Debug.WriteLine("Recuparado: " + res.GetDouble(1) + res.GetDouble(2) + res.GetDouble(3));
+                 m = new MercadoDTO(res.GetDouble(1), res.GetDouble(2), res.GetDouble(3));
+             }*/
+
+            //return m;
+            return mercado;
 
         }
 
         internal List<ApuestaMercado> GetApuestasMercado(double tipoMercado, string email)
         {
 
-            MySqlConnection con = Connect();
-            MySqlCommand command = con.CreateCommand();
-            command.CommandText = "SELECT m.OverUnder, m.ID_Evento , a.TipoApuesta, a.Cuota, a.DineroApostado, a.Email_Usuario FROM mercado m join apuesta a ON a.ID_Mercado = m.ID WHERE OverUnder = @tipo && Email_usuario = @email ";
-            command.Parameters.AddWithValue("@email", email);
-            command.Parameters.AddWithValue("@tipo", tipoMercado);
+            /* MySqlConnection con = Connect();
+             MySqlCommand command = con.CreateCommand();
+             command.CommandText = "SELECT m.OverUnder, m.ID_Evento , a.TipoApuesta, a.Cuota, a.DineroApostado, a.Email_Usuario FROM mercado m join apuesta a ON a.ID_Mercado = m.ID WHERE OverUnder = @tipo && Email_usuario = @email ";
+             command.Parameters.AddWithValue("@email", email);
+             command.Parameters.AddWithValue("@tipo", tipoMercado);
 
-            con.Open();
-            MySqlDataReader res = command.ExecuteReader();
+             con.Open();
+             MySqlDataReader res = command.ExecuteReader();
 
-            ApuestaMercado apuestasUser = null;
-            List<ApuestaMercado> mercadoApuesta = new List<ApuestaMercado>();
+             ApuestaMercado apuestasUser = null;
+             List<ApuestaMercado> mercadoApuesta = new List<ApuestaMercado>();
 
-            while (res.Read())
-            {
+             while (res.Read())
+             {
 
 
-                apuestasUser = new ApuestaMercado(res.GetInt32(1), res.GetString(2), res.GetDouble(3), res.GetDouble(4));
-                mercadoApuesta.Add(apuestasUser);
-            }
+                 apuestasUser = new ApuestaMercado(res.GetInt32(1), res.GetString(2), res.GetDouble(3), res.GetDouble(4));
+                 mercadoApuesta.Add(apuestasUser);
+             }*/
 
-            return mercadoApuesta;
+            // return mercadoApuesta;
+
+            return null;
 
         }
 
         internal Mercado getMercado(int id, double tipo)
         {
 
-            MySqlConnection con = Connect();
-            MySqlCommand command = con.CreateCommand();
-            command.CommandText = "SELECT * FROM Mercado where ID_Evento= @id && OverUnder=@tipo";
-            command.Parameters.AddWithValue("@id", id);
-            command.Parameters.AddWithValue("@tipo", tipo);
+            /*  MySqlConnection con = Connect();
+              MySqlCommand command = con.CreateCommand();
+              command.CommandText = "SELECT * FROM Mercado where ID_Evento= @id && OverUnder=@tipo";
+              command.Parameters.AddWithValue("@id", id);
+              command.Parameters.AddWithValue("@tipo", tipo);
 
-            con.Open();
-            MySqlDataReader res = command.ExecuteReader();
+              con.Open();
+              MySqlDataReader res = command.ExecuteReader();
 
-            Mercado m = null;
+              Mercado m = null;
 
-            if (res.Read())
-            {
+              if (res.Read())
+              {
 
-                Debug.WriteLine("Recuparado: " + res.GetDouble(1) + res.GetDouble(2) + res.GetDouble(3));
-                m = new Mercado(res.GetInt32(0), res.GetDouble(1), res.GetDouble(2), res.GetDouble(3), res.GetDouble(4), res.GetDouble(5), res.GetDouble(6));
-            }
+                  Debug.WriteLine("Recuparado: " + res.GetDouble(1) + res.GetDouble(2) + res.GetDouble(3));
+                  m = new Mercado(res.GetInt32(0), res.GetDouble(1), res.GetDouble(2), res.GetDouble(3), res.GetDouble(4), res.GetDouble(5), res.GetDouble(6));
+              }
 
-            return m;
+              return m;*/
+
+            return null;
 
         }
 
         internal void UpdateDinero(ApuestaDTO apuesta)
         {
 
-            MySqlConnection con = Connect();
+            /*MySqlConnection con = Connect();
             MySqlCommand command = con.CreateCommand();
 
             con.Open();
@@ -112,7 +151,9 @@ namespace PlaceMyBet.Models
             {
                 command.CommandText = "UPDATE Mercado SET DineroUnder = DineroUnder + " + apuesta.DineroApostado + "  WHERE ID = " + apuesta.IDMercado + "; ";
             }
-            command.ExecuteNonQuery();
+            command.ExecuteNonQuery();*/
+
+           
 
         }
 
@@ -121,29 +162,31 @@ namespace PlaceMyBet.Models
         internal MercadoDinero RetrieveDinero()
         {
 
-            MySqlConnection con = Connect();
-            MySqlCommand command = con.CreateCommand();
-            command.CommandText = "SELECT * FROM Mercado";
+            /* MySqlConnection con = Connect();
+             MySqlCommand command = con.CreateCommand();
+             command.CommandText = "SELECT * FROM Mercado";
 
-            con.Open();
-            MySqlDataReader res = command.ExecuteReader();
+             con.Open();
+             MySqlDataReader res = command.ExecuteReader();
 
-            MercadoDinero Dinero = null;
+             MercadoDinero Dinero = null;
 
-            if (res.Read())
-            {
-                Debug.WriteLine("dinero recuperado " + res.GetInt32(0) + res.GetDouble(4) + res.GetDouble(5));
-                Dinero = new MercadoDinero(res.GetInt32(0), res.GetDouble(4), res.GetDouble(5));
-            }
+             if (res.Read())
+             {
+                 Debug.WriteLine("dinero recuperado " + res.GetInt32(0) + res.GetDouble(4) + res.GetDouble(5));
+                 Dinero = new MercadoDinero(res.GetInt32(0), res.GetDouble(4), res.GetDouble(5));
+             }
 
-            return Dinero;
+             return Dinero;*/
+
+            return null;
 
         }
 
         internal void Calculos(MercadoDinero Dinero)
         {
             
-            MySqlConnection con = Connect();
+           /* MySqlConnection con = Connect();
             MySqlCommand command = con.CreateCommand();
             double probabilidadOver = Dinero.DineroOver / (Dinero.DineroOver + Dinero.DineroUnder);
             double cuotaOver = 0;
@@ -175,7 +218,7 @@ namespace PlaceMyBet.Models
 
             
 
-            command.ExecuteNonQuery();
+            command.ExecuteNonQuery();*/
 
 
 

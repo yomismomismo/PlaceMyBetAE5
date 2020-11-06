@@ -11,48 +11,36 @@ namespace PlaceMyBet.Controllers
     public class ApuestaController : ApiController
     {
         // GET: api/Apuesta
-        public IEnumerable<string> Get()
+        public IEnumerable<Apuesta> Get()
         {
-            return new string[] { "value1", "value2" };
+            var repo = new ApuestaRepository();
+            List<Apuesta> apuesta = repo.RetrieveList();
+            return apuesta;
         }
 
-        // GET: api/Apuesta/5
-        public ApuestaDTO Get(int id)
+       //GET: api/Apuesta/5
+        public Apuesta Get(int Id)
         {
 
             var repo = new ApuestaRepository();
-            ApuestaDTO a = repo.Retrieve();
+            Apuesta a = repo.Retrieve(Id);
             return a;
 
         }
-        [Authorize(Roles ="admin")]
-        // GET: api/Apuesta/?Email=email&tipoMercado=tipo
-        public IEnumerable<ApuestaUser> GetApuestasUser(string Email, double tipoMercado)
-        {
 
-            var repo = new ApuestaRepository();
-            List<ApuestaUser> apuestasUser = repo.getApuestaUser(Email, tipoMercado);
-            return apuestasUser;
-
-        }
-
-
-
-
-
+        /*
         // POST: api/Apuesta
         public void Post([FromBody]ApuestaDTO apuesta)
         {
             var repoMercado = new MercadoRepository();
             var repo = new ApuestaRepository();
 
-            double cuota = repo.RetrieveCuotas(apuesta);
+           var cuota = repo.RetrieveCuotas(apuesta);
 
             repoMercado.UpdateDinero(apuesta);
+           var dinero = repoMercado.RetrieveDinero(apuesta);
 
-            MercadoDinero dinero = repoMercado.RetrieveDinero();
-
-            repoMercado.Calculos(dinero);
+            repoMercado.Calculos(apuesta, dinero);
             repo.Save(apuesta, cuota);
         }
 
@@ -64,6 +52,6 @@ namespace PlaceMyBet.Controllers
         // DELETE: api/Apuesta/5
         public void Delete(int id)
         {
-        }
+        }*/
     }
 }
