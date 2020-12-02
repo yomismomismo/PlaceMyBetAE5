@@ -18,13 +18,14 @@ using MySql.Data.MySqlClient;
                 return con;
 
             }*/
-            internal List<Evento> RetrieveList()
+            internal List<EventoDTO> RetrieveList()
             {
-            List<Evento> evento = new List<Evento>();
             using (PlaceMyBetContext context = new PlaceMyBetContext())
             {
-                evento = context.Eventos.ToList();
+                List<EventoDTO> eventos = context.Eventos.Select(p => ToDTO(p)).ToList();
+                return eventos;
             }
+
             /* MySqlConnection con = Connect();
              MySqlCommand command = con.CreateCommand();
              command.CommandText = "SELECT * FROM Evento";
@@ -42,10 +43,48 @@ using MySql.Data.MySqlClient;
 
 
             //return e;
-            return evento;
 
             }
 
+
+        internal void updateDinero(int id, Evento evento)
+        {
+
+            using (PlaceMyBetContext context = new PlaceMyBetContext())
+            {
+                var newEvent = context.Eventos
+                    .Where(b => b.EventoID == id)
+                    .FirstOrDefault();
+
+                if (evento.Equipo_Local != null)
+                {
+                    newEvent.Equipo_Local = evento.Equipo_Local;
+                }
+
+                if (evento.Equipo_Visitante != null)
+                {
+                    newEvent.Equipo_Visitante = evento.Equipo_Visitante;
+                }
+                context.SaveChanges();
+            }
+        }
+        internal void DeleteEvento(int id)
+        {
+
+            using (PlaceMyBetContext context = new PlaceMyBetContext())
+            {
+                var removeEvent = context.Eventos
+                    .Where(b => b.EventoID == id)
+                    .FirstOrDefault();
+
+                context.Eventos.Remove(removeEvent);
+                context.SaveChanges();
+            }
+        }
+        internal static EventoDTO ToDTO(Evento e)
+        {
+            return new EventoDTO(e.Equipo_Local, e.Equipo_Visitante, e.Fecha);
+        }
         internal void Save(Evento e)
         {
             PlaceMyBetContext context = new PlaceMyBetContext();

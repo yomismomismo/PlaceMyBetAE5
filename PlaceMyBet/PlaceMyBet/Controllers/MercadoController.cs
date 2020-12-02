@@ -11,10 +11,10 @@ namespace PlaceMyBet.Controllers
     public class MercadoController : ApiController
     {
         // GET: api/Mercado
-        public IEnumerable<Mercado> Get()
+        public IEnumerable<MercadoDTO> Get()
         {
             var repo = new MercadoRepository();
-            List<Mercado> mercado = repo.RetrieveList();
+            List<MercadoDTO> mercado = repo.RetrieveList();
             return mercado;
         }
 
@@ -36,11 +36,15 @@ namespace PlaceMyBet.Controllers
             return apuestasUser;
 
         }
-
+                */
         // POST: api/Mercado
-        public void Post([FromBody]string value)
+        public void Post([FromBody]Mercado mercado)
         {
+            var repo = new MercadoRepository();
+            repo.save(mercado);
         }
+        
+        /*
 
         // PUT: api/Mercado/5
         public void Put(int id, [FromBody]string value)

@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Globalization;
 using System.Linq;
-using System.Web;
-using MySql.Data.MySqlClient;
-
+using Microsoft.EntityFrameworkCore;
 namespace PlaceMyBet.Models
 {
     public class MercadoRepository
@@ -20,12 +16,20 @@ namespace PlaceMyBet.Models
 
         }*/
 
-        internal List<Mercado> RetrieveList()
+        internal List<MercadoDTO> RetrieveList()
         {
-            List<Mercado> mercado = new List<Mercado>();
+            /*
             using (PlaceMyBetContext context = new PlaceMyBetContext())
             {
-                mercado = context.Mercados.ToList();
+                List<Apuesta> apuesta = context.Apuestas.Include(a => a.Mercado).ToList();
+                List<Mercado> mercado = context.Mercados.Include(evento => evento.Evento).ToList();
+                return mercado;
+            }*/
+
+            using (PlaceMyBetContext context = new PlaceMyBetContext())
+            {
+                List<MercadoDTO> eventos = context.Mercados.Select(p => ToDTO(p)).ToList();
+                return eventos;
             }
             /* MySqlConnection con = Connect();
              MySqlCommand command = con.CreateCommand();
@@ -44,11 +48,14 @@ namespace PlaceMyBet.Models
              }*/
 
             //return m;
-            return mercado;
+
 
         }
 
-
+        internal static MercadoDTO ToDTO(Mercado m)
+        {
+            return new MercadoDTO(m.OverUnder, m.CuotaOver, m.CuotaUnder);
+        }
         internal Mercado Retrieve(int id)
         {
             Mercado mercado;
@@ -134,9 +141,43 @@ namespace PlaceMyBet.Models
 
         }
 
-        internal void UpdateDinero(ApuestaDTO apuesta)
+        internal void UpdateDinero(Apuesta apuesta)
         {
+            Mercado mercado;
+            using (PlaceMyBetContext context = new PlaceMyBetContext())
+            {
 
+                    mercado = context.Mercados
+                        .Where(m => m.MercadoID == apuesta.MercadoID)
+                        .FirstOrDefault();
+                //Actualizamos el dinero apostado Over/Under
+                if (apuesta.TipoApuesta == "Over")
+                {
+                    mercado.DineroOver += apuesta.DineroApostado;
+                }
+                else if(apuesta.TipoApuesta == "Under")
+                {
+                    mercado.DineroUnder += apuesta.DineroApostado;
+                }
+
+                //calculo de probabilidad Over
+                double probabilidadOver = mercado.DineroOver / (mercado.DineroOver + mercado.DineroUnder);
+                if (probabilidadOver != 0)
+                {
+                    double CuotaOver = 1 / probabilidadOver * 0.95;
+                    mercado.CuotaOver = Math.Round((double)Convert.ToDouble(CuotaOver), 2);
+                }
+
+                //calculo de probabilidad Under
+                double probabilidadUnder = mercado.DineroUnder / (mercado.DineroOver + mercado.DineroUnder);
+                if (probabilidadUnder != 0)
+                {
+                    double CuotaUnder = 1 / probabilidadUnder * 0.95;
+                    mercado.CuotaUnder = Math.Round((double)Convert.ToDouble(CuotaUnder), 2);
+                }
+                //Guardamos cambios en la base de datos
+                context.SaveChanges();
+            }
             /*MySqlConnection con = Connect();
             MySqlCommand command = con.CreateCommand();
 
@@ -153,7 +194,7 @@ namespace PlaceMyBet.Models
             }
             command.ExecuteNonQuery();*/
 
-           
+
 
         }
 
@@ -224,6 +265,14 @@ namespace PlaceMyBet.Models
 
 
 
+
+        }
+
+        internal void save(Mercado mercado)
+        {
+            PlaceMyBetContext context = new PlaceMyBetContext();
+            context.Add(mercado);
+            context.SaveChanges();
 
         }
 

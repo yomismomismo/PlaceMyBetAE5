@@ -13,13 +13,13 @@ namespace PlaceMyBet.Models
         public double DineroApostado { get; set; }
         public string TipoApuesta { get; set; }
         public double Cuota { get; set; }
-        public string Fecha { get; set; }
+        public DateTime Fecha { get; set; }
         public int MercadoID { get; set; }
         public Mercado Mercado { get; set; }
         public string UsuarioEmail { get; set; }
         public Usuario Usuario { get; set; }
 
-        public Apuesta(int apuestaID, double dineroApostado, string tipoApuesta, double cuota, string fecha, int mercadoID, string usuarioEmail)
+        public Apuesta(int apuestaID, double dineroApostado, string tipoApuesta, double cuota, DateTime fecha, int mercadoID, string usuarioEmail)
         {
             ApuestaID = apuestaID;
             DineroApostado = dineroApostado;
@@ -33,22 +33,21 @@ namespace PlaceMyBet.Models
 
     public class ApuestaDTO
     {
-        public ApuestaDTO(double dineroApostado, string tipoApuesta, double cuota, string fecha, int iDMercado, string usuarioEmail)
+        public ApuestaDTO(double dineroApostado, string tipoApuesta, double cuota, int iDmercado, string usuarioEmail)
         {
             DineroApostado = dineroApostado;
             TipoApuesta = tipoApuesta;
-            this.Cuota = cuota;
-            Fecha = fecha;
-            IDMercado = iDMercado;
-           UsuarioEmail = usuarioEmail;
+            Cuota = cuota;
+            IDmercado = iDmercado;
+            UsuarioEmail = usuarioEmail;
         }
 
         public double DineroApostado { get; set; }
         public string TipoApuesta { get; set; }
         public double Cuota { get; set; }
-        public string Fecha { get; set; }
-        public int IDMercado { get; set; }
+        public int IDmercado { get; set; }
         public string UsuarioEmail { get; set; }
+
 
     }
 

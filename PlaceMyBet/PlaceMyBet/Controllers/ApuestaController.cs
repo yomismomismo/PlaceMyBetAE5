@@ -11,10 +11,10 @@ namespace PlaceMyBet.Controllers
     public class ApuestaController : ApiController
     {
         // GET: api/Apuesta
-        public IEnumerable<Apuesta> Get()
+        public IEnumerable<ApuestaDTO> Get()
         {
             var repo = new ApuestaRepository();
-            List<Apuesta> apuesta = repo.RetrieveList();
+            List<ApuestaDTO> apuesta = repo.RetrieveList();
             return apuesta;
         }
 
@@ -28,22 +28,23 @@ namespace PlaceMyBet.Controllers
 
         }
 
-        /*
+        
         // POST: api/Apuesta
-        public void Post([FromBody]ApuestaDTO apuesta)
+        public void Post([FromBody]Apuesta apuesta)
         {
             var repoMercado = new MercadoRepository();
             var repo = new ApuestaRepository();
 
-           var cuota = repo.RetrieveCuotas(apuesta);
+            repo.Save(apuesta);
+            /*  var cuota = repo.RetrieveCuotas(apuesta);*/
 
-            repoMercado.UpdateDinero(apuesta);
-           var dinero = repoMercado.RetrieveDinero(apuesta);
+                repoMercado.UpdateDinero(apuesta);
+             /*  var dinero = repoMercado.RetrieveDinero(apuesta);
 
-            repoMercado.Calculos(apuesta, dinero);
-            repo.Save(apuesta, cuota);
+                repoMercado.Calculos(apuesta, dinero);
+                repo.Save(apuesta, cuota);*/
         }
-
+        /*
         // PUT: api/Apuesta/5
         public void Put(int id, [FromBody]string value)
         {

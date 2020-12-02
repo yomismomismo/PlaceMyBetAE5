@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Web;
+using Microsoft.EntityFrameworkCore;
 using MySql.Data.MySqlClient;
 
 namespace PlaceMyBet.Models
@@ -19,12 +20,19 @@ namespace PlaceMyBet.Models
 
         }*/
 
-        internal List<Apuesta> RetrieveList()
+        internal List<ApuestaDTO> RetrieveList()
         {
-            List<Apuesta> apuesta = new List<Apuesta>();
+            /*
             using (PlaceMyBetContext context = new PlaceMyBetContext())
             {
-                apuesta = context.Apuestas.ToList();
+                List<Mercado> mercado = context.Mercados.Include(evento => evento.Evento).ToList();
+                List<Apuesta> apuesta = context.Apuestas.Include(a => a.Mercado).ToList();
+                return apuesta;
+            }*/
+            using (PlaceMyBetContext context = new PlaceMyBetContext())
+            {
+                List<ApuestaDTO> eventos = context.Apuestas.Select(a => ToDTO(a)).ToList();
+                return eventos;
             }
 
             //MySqlConnection con = Connect();
@@ -36,23 +44,26 @@ namespace PlaceMyBet.Models
             ///    MySqlDataReader res = command.ExecuteReader();
 
 
-              //  if (res.Read())
-              //  {
+            //  if (res.Read())
+            //  {
 
-               //     Debug.WriteLine("Recuperado: " + res.GetDouble(1) + res.GetString(2) + res.GetDouble(3) + res.GetString(4) + res.GetInt16(5) + res.GetString(6));
-               //     a = new ApuestaDTO(res.GetDouble(1), res.GetString(2), res.GetDouble(3), res.GetString(4), res.GetInt16(5), res.GetString(6));
-               // }
-                //con.Close();
-               // return a;
-           // }
+            //     Debug.WriteLine("Recuperado: " + res.GetDouble(1) + res.GetString(2) + res.GetDouble(3) + res.GetString(4) + res.GetInt16(5) + res.GetString(6));
+            //     a = new ApuestaDTO(res.GetDouble(1), res.GetString(2), res.GetDouble(3), res.GetString(4), res.GetInt16(5), res.GetString(6));
+            // }
+            //con.Close();
+            // return a;
+            // }
             //catch (MySqlException a)
             //{
 
-              //  Debug.WriteLine("Se ha producido un error de conexión");
-                return apuesta;
+            //  Debug.WriteLine("Se ha producido un error de conexión");
 
-            }
 
+        }
+        internal static ApuestaDTO ToDTO(Apuesta a)
+        {
+            return new ApuestaDTO(a.DineroApostado, a.TipoApuesta, a.Cuota, a.MercadoID, a.UsuarioEmail);
+        }
         internal Apuesta Retrieve(int id)
         {
             Apuesta apuesta;
@@ -156,25 +167,29 @@ namespace PlaceMyBet.Models
         }
 
 
-        internal void Save(ApuestaDTO apuesta, double cuota)
-        {
-           // MySqlConnection con = Connect();
+       /* internal void Save(ApuestaDTO apuesta, double cuota)
+        {*/
+            internal void Save(Apuesta apuesta)
+            {
+            // MySqlConnection con = Connect();
             //MySqlCommand command = con.CreateCommand();
 
 
+            PlaceMyBetContext context = new PlaceMyBetContext();
+            context.Add(apuesta);
+            context.SaveChanges();
 
 
 
 
+            // con.Open();
+            // command.CommandText = "INSERT INTO apuesta(DineroApostado, TipoApuesta, Cuota, ID_Mercado, Email_Usuario) VALUES('" + apuesta.DineroApostado + "','" + apuesta.TipoApuesta + "','" + cuota.ToString(CultureInfo.CreateSpecificCulture("us-US")) + "','" + apuesta.IDMercado + "','" + apuesta.EmailUsuario + "');";
+            // Debug.WriteLine("Comando: " + command.CommandText);
+            // command.ExecuteNonQuery();
 
-               // con.Open();
-               // command.CommandText = "INSERT INTO apuesta(DineroApostado, TipoApuesta, Cuota, ID_Mercado, Email_Usuario) VALUES('" + apuesta.DineroApostado + "','" + apuesta.TipoApuesta + "','" + cuota.ToString(CultureInfo.CreateSpecificCulture("us-US")) + "','" + apuesta.IDMercado + "','" + apuesta.EmailUsuario + "');";
-               // Debug.WriteLine("Comando: " + command.CommandText);
-               // command.ExecuteNonQuery();
 
+            // con.Close();
 
-               // con.Close();
-            
 
 
 

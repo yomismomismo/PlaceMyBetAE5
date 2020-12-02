@@ -45,9 +45,9 @@ namespace PlaceMyBet.Models
             modelBuilder.Entity<Mercado>().HasData(new Mercado(2, 2.5, 1.9, 1.9, 210, 100, 1));
             modelBuilder.Entity<Mercado>().HasData(new Mercado(3, 3.5, 2.85, 1.43, 50, 100, 1));
             modelBuilder.Entity<Evento>().HasData(new Evento(1, "Valencia", "Espanyol", "2020-09-16", 0));
-            modelBuilder.Entity<Apuesta>().HasData(new Apuesta(1, 10, "Over", 1.9, "2020-11-04 11:37:06", 1, "yomismomismo@yomismo.cat"));
-            modelBuilder.Entity<Apuesta>().HasData(new Apuesta(5, 10, "Over", 1.78, "2020-11-04 11:38:12", 1, "tumismo@yomismo.cat"));
-            modelBuilder.Entity<Apuesta>().HasData(new Apuesta(6, 10, "Over", 1.9, "2020-11-04 12:10:35", 2, "tumismo@yomismo.cat"));
+            modelBuilder.Entity<Apuesta>().HasData(new Apuesta(1, 10, "Over", 1.9, new DateTime(2020, 11, 04), 1, "yomismomismo@yomismo.cat"));
+            modelBuilder.Entity<Apuesta>().HasData(new Apuesta(5, 10, "Over", 1.78, new DateTime(2020, 11, 04), 1, "tumismo@yomismo.cat"));
+            modelBuilder.Entity<Apuesta>().HasData(new Apuesta(6, 10, "Over", 1.9, new DateTime(2020, 11, 04), 2, "tumismo@yomismo.cat"));
 
         }
 
