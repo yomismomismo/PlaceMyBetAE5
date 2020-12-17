@@ -4,8 +4,9 @@ using System.Linq;
 using System.Diagnostics;
 using System.Web;
 using MySql.Data.MySqlClient;
+using Microsoft.EntityFrameworkCore;
 
-    namespace PlaceMyBet.Models
+namespace PlaceMyBet.Models
     {
         public class EventoRepository
         {
@@ -44,9 +45,24 @@ using MySql.Data.MySqlClient;
 
             //return e;
 
+        }
+        
+        /*** Ejercicio 1 ***/
+        internal List<Mercado> apuestaEvento(string nombre)
+        {
+
+            List<Mercado> evento;
+            using (PlaceMyBetContext context = new PlaceMyBetContext())
+            {
+                evento = context.Mercados
+                    .Include(e=> e.Evento)
+                    .Include(a => a.Apuestas)
+                    .Where(e => e.Evento.Equipo_Local == nombre || e.Evento.Equipo_Visitante == nombre)
+                    .ToList();
+                return evento;
             }
-
-
+            /*** Fin Ejercicio 1 ***/
+        }
         internal void updateDinero(int id, Evento evento)
         {
 
